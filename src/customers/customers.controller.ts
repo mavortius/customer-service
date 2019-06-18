@@ -1,11 +1,9 @@
-import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Put, UsePipes } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiUseTags } from '@nestjs/swagger';
 import { CustomersService } from './customers.service';
 import { CustomerDto } from './customer.dto';
 import { ValidateObjectIdPipe } from '../shared/pipes/validate-object-id.pipe';
-import { ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiUseTags } from '@nestjs/swagger';
-import { Customer } from './customer.interface';
-import { type } from 'os';
-import { ValidationPipe } from '../shared/pipes/validation.pipe';
 
 @ApiUseTags('customers')
 @Controller('customers')
@@ -35,13 +33,13 @@ export class CustomersController {
   }
 
   @Post()
-  @UsePipes(new ValidationPipe())
+  @UseGuards(AuthGuard('jwt'))
   async addCustomer(@Body() dto: CustomerDto) {
     return await this.service.addCustomer(dto);
   }
 
   @Put(':id')
-  @UsePipes(new ValidationPipe())
+  @UseGuards(AuthGuard('jwt'))
   async updateCustomer(@Param('id', new ValidateObjectIdPipe()) id: string, @Body() dto: CustomerDto) {
     const found = await this.service.updateCustomer(id, dto);
 
@@ -54,6 +52,7 @@ export class CustomersController {
 
   @Delete(':id')
   @HttpCode(204)
+  @UseGuards(AuthGuard('jwt'))
   async deleteCustomer(@Param('id', new ValidateObjectIdPipe()) id: string) {
     const found = await this.service.deleteCustomer(id);
 
