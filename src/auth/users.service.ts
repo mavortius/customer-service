@@ -22,7 +22,11 @@ export class UsersService {
   }
 
   async addUser(dto: UserDto): Promise<User> {
-    return await new this.model(dto).save();
+    const newUser = new this.model(dto);
+
+    newUser.setPassword(dto.password);
+
+    return await newUser.save();
   }
 
   async updateUser(id: string, dto: UserDto): Promise<User> {

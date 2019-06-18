@@ -7,6 +7,9 @@ export class UserDto {
   @ApiModelProperty()
   readonly username: string;
 
+  @IsNotEmpty()
+  readonly password: string;
+
   @IsEmail()
   @ApiModelProperty()
   readonly email: string;

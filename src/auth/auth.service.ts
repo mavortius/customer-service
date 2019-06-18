@@ -4,6 +4,7 @@ import { UsersService } from './users.service';
 import { User } from './user.interface';
 import { SigninData } from './signin-data.interface';
 import { JwtPayload } from './jwt-payload.interface';
+import { UserDto } from './user.dto';
 
 @Injectable()
 export class AuthService {
@@ -14,8 +15,8 @@ export class AuthService {
   async singIn(data: SigninData): Promise<any> {
     const user = await this.usersService.getUserByUsername(data.username);
 
-    if (!user) {
-      throw new UnauthorizedException();
+    if (!user || !user.validPassword(data.password)) {
+      throw new UnauthorizedException('User or password invalid', 'Unauthenticated');
     }
 
     const payload: JwtPayload = { user_id: user._id };
@@ -26,8 +27,8 @@ export class AuthService {
     };
   }
 
-  async register(user: User): Promise<User> {
-    return this.usersService.addUser(user);
+  async signUp(user: UserDto): Promise<User> {
+    return await this.usersService.addUser(user);
   }
 
   async validate(payload: JwtPayload): Promise<User> {
