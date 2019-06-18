@@ -8,5 +8,6 @@ export interface User extends Document {
   readonly salt: string;
 
   setPassword(password: string): void;
+
   validPassword(password: string): boolean;
 }

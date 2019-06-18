@@ -1,10 +1,10 @@
-import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Put, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Body, Controller, Delete, Get, HttpCode, Logger, NotFoundException, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiUseTags } from '@nestjs/swagger';
 import { CustomersService } from './customers.service';
 import { CustomerDto } from './customer.dto';
 import { ValidateObjectIdPipe } from '../shared/pipes/validate-object-id.pipe';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Genre } from './customer.interface';
 
 @ApiUseTags('customers')
 @Controller('customers')
@@ -16,6 +16,7 @@ export class CustomersController {
   @ApiOperation({title: 'Get customers list'})
   @ApiOkResponse({ description: 'Retrieve a list of all customers.'})
   async getAllCustomers() {
+    Logger.log(Object.keys(Genre));
     return await this.service.getAllCustomers();
   }
 

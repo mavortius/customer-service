@@ -1,5 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { Genre } from './customer.interface';
 
 export class CustomerDto {
   @IsString()
@@ -16,6 +17,11 @@ export class CustomerDto {
   @IsNotEmpty()
   @ApiModelProperty()
   readonly email: string;
+
+  @IsEnum(Genre)
+  @IsNotEmpty()
+  @ApiModelProperty()
+  readonly genre: Genre;
 
   @IsString()
   @IsNotEmpty()

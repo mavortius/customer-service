@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Put, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { ApiNotFoundResponse, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 import { ValidateObjectIdPipe } from '../shared/pipes/validate-object-id.pipe';
 import { UsersService } from './users.service';
 import { UserDto } from './user.dto';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -32,13 +32,13 @@ export class UsersController {
   }
 
   @Post()
-  @UseGuards(AuthGuard())
+  @UseGuards(JwtAuthGuard)
   async addUser(@Body() dto: UserDto) {
     return await this.service.addUser(dto);
   }
 
   @Put(':id')
-  @UseGuards(AuthGuard())
+  @UseGuards(JwtAuthGuard)
   async updateUser(@Param('id', new ValidateObjectIdPipe()) id: string, @Body() dto: UserDto) {
     const found = await this.service.updateUser(id, dto);
 
@@ -51,7 +51,7 @@ export class UsersController {
 
   @Delete(':id')
   @HttpCode(204)
-  @UseGuards(AuthGuard())
+  @UseGuards(JwtAuthGuard)
   async deleteUser(@Param('id', new ValidateObjectIdPipe()) id: string) {
     const found = await this.service.deleteUser(id);
 
