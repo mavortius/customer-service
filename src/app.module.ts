@@ -13,6 +13,8 @@ import { ConfigService } from './config/config.service';
       useFactory: async (config: ConfigService) => ({
         uri: config.get('MONGODB_URI'),
         useNewUrlParser: true,
+        useFindAndModify: false,
+        useCreateIndex: true,
       }),
     }),
     CustomersModule,
