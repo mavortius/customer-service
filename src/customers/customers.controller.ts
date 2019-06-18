@@ -4,6 +4,7 @@ import { ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiUseTags } from '@n
 import { CustomersService } from './customers.service';
 import { CustomerDto } from './customer.dto';
 import { ValidateObjectIdPipe } from '../shared/pipes/validate-object-id.pipe';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiUseTags('customers')
 @Controller('customers')
@@ -33,13 +34,13 @@ export class CustomersController {
   }
 
   @Post()
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   async addCustomer(@Body() dto: CustomerDto) {
     return await this.service.addCustomer(dto);
   }
 
   @Put(':id')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   async updateCustomer(@Param('id', new ValidateObjectIdPipe()) id: string, @Body() dto: CustomerDto) {
     const found = await this.service.updateCustomer(id, dto);
 
@@ -52,7 +53,7 @@ export class CustomersController {
 
   @Delete(':id')
   @HttpCode(204)
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   async deleteCustomer(@Param('id', new ValidateObjectIdPipe()) id: string) {
     const found = await this.service.deleteCustomer(id);
 
