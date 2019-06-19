@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 import * as crypto from 'crypto';
+import { Role } from './user.interface';
 
 export const UserSchema = new mongoose.Schema({
   username: {
@@ -16,6 +17,7 @@ export const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  roles: { type: [String], enum: Object.keys(Role) },
   hash: String,
   salt: String,
 });

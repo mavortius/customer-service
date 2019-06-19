@@ -1,5 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { Role } from './user.interface';
 
 export class UserDto {
   @IsString()
@@ -18,4 +19,8 @@ export class UserDto {
   @IsNotEmpty()
   @ApiModelProperty()
   readonly fullName: string;
+
+  @IsNotEmpty()
+  @ApiModelProperty()
+  readonly roles: Role[];
 }
