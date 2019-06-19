@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { User } from './user.interface';
 import { SigninData } from './signin-data.interface';
 import { UserDto } from './user.dto';
+import { Roles } from './roles.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -16,6 +17,7 @@ export class AuthController {
   }
 
   @Post('sign-up')
+  @Roles('ADMINISTRATOR')
   async signUp(@Body() user: UserDto): Promise<User> {
     return this.auth.signUp(user);
   }

@@ -4,6 +4,8 @@ import { ValidateObjectIdPipe } from '../shared/pipes/validate-object-id.pipe';
 import { UsersService } from './users.service';
 import { UserDto } from './user.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { Roles } from './roles.decorator';
+import { RolesGuard } from './roles.guard';
 
 @Controller('users')
 export class UsersController {
@@ -11,6 +13,8 @@ export class UsersController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMINISTRATOR')
   @ApiOperation({title: 'Get users list'})
   @ApiOkResponse({ description: 'Retrieve a list of all users.'})
   async getAllUsers() {
@@ -32,13 +36,15 @@ export class UsersController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMINISTRATOR')
   async addUser(@Body() dto: UserDto) {
     return await this.service.addUser(dto);
   }
 
   @Put(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMINISTRATOR')
   async updateUser(@Param('id', new ValidateObjectIdPipe()) id: string, @Body() dto: UserDto) {
     const found = await this.service.updateUser(id, dto);
 
@@ -51,7 +57,8 @@ export class UsersController {
 
   @Delete(':id')
   @HttpCode(204)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMINISTRATOR')
   async deleteUser(@Param('id', new ValidateObjectIdPipe()) id: string) {
     const found = await this.service.deleteUser(id);
 
